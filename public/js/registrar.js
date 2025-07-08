@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Funciones principales
+    // Funciones principales
     async function cargarProductos() {
         try {
             const response = await fetch('/api/productos');
@@ -80,9 +81,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 productosDisponibles = data.data;
                 console.log('Productos cargados:', productosDisponibles.length);
+                
+                // Agregar el primer producto una vez que se cargan los productos
+                if (productosDisponibles.length > 0) {
+                    agregarProducto();
+                }
             } else {
                 console.error('Error al cargar productos:', data.message);
-                showAlert('Error al cargar productos', 'warning');
+                showAlert('Error al cargar productos disponibles', 'warning');
             }
         } catch (error) {
             console.error('Error al cargar productos:', error);
@@ -138,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function agregarProducto() {
         if (productosDisponibles.length === 0) {
-            showAlert('No hay productos disponibles', 'warning');
+            console.log('Cargando productos...');
             return;
         }
 
@@ -152,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </button>
                 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Producto</label>
                         <select class="form-select producto-select" name="productos[${contadorProductos}][idProducto]" required onchange="actualizarProducto(this, '${productoId}')">
                             <option value="">Seleccionar producto...</option>
@@ -182,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                name="productos[${contadorProductos}][descripcion]" 
                                readonly>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label class="form-label">Subtotal</label>
                         <input type="text" class="form-control subtotal-display" readonly>
                     </div>
